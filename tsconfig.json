@@ -1,0 +1,19 @@
+{
+  //suggested options from https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping#recommended-node-tsconfig-settings
+  "compilerOptions": {
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "target": "es6", //leave as es6 or else class fields won't work
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+  },
+  "ts-node": {
+    // doesn't do type checking anymore. Will transpile in ts-node and run way faster
+    //https://typestrong.org/ts-node/docs/performance/#skip-typechecking
+    // I tried swc (a rust transpiler) but it didn't work with circular dependencies in the objection
+    // model definitions
+    "transpileOnly": true,
+  },
+  "lib": ["ES2021"]
+}
