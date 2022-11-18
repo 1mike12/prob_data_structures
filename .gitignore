@@ -1,3 +1,4 @@
 node_modules/
-hyperloglog.iml
+*.iml
 .idea/
+dist/

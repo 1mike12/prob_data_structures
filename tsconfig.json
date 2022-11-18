@@ -15,5 +15,6 @@
     // model definitions
     "transpileOnly": true,
   },
+  "exclude": ["node_modules", "**/*.test.ts"],
   "lib": ["ES2021"]
 }

@@ -1,50 +1,30 @@
-import HyperLogLog from "./index"
-import { XXHash32, XXHash64 } from "xxhash-addon"
-import { equal, ok } from "assert"
+import { XXHash32 } from "xxhash-addon"
+import { equal, ok, notEqual } from "assert"
+import BloomFilter from "./index"
 
-describe("HyperLogLog", () => {
-   it("should construct properly", () => {
-      const h = new HyperLogLog(4, (value) => {
-         const buffer = Buffer.from(value)
-         return XXHash32.hash(buffer)
-      })
-      equal(h.buckets.length, 16)
+function closelyEqual(a: number, b: number, error: number) {
+   ok(Math.abs(a - b) < (a * error))
+}
+
+describe("BloomFilter", () => {
+   const hashFunction = (value: string) => {
+      return XXHash32.hash(Buffer.from(value))
+   }
+
+   it("should insert values without crashing", () => {
+      const filter = new BloomFilter(hashFunction)
+      filter.insert("hello")
+      filter.insert("world")
    })
 
-   it("should insert", () => {
-      const h = new HyperLogLog(4, (value) => {
-         const buffer = Buffer.from(value)
-         return XXHash32.hash(buffer)
-      })
-      h.insert("hello")
-      h.insert("world")
-      h.insert("something")
-      h.insert("something else")
-      const largest = h.getLargestBucket()
-      ok(largest > 0)
+   it("should definitely not contain uninserted values", () => {
+      const filter = new BloomFilter(hashFunction)
+      ok(!filter.contains("trotzdem"))
    })
 
-   it("should have values larger than 1", () => {
-      const h = new HyperLogLog(4, (value) => {
-         const buffer = Buffer.from(value)
-         return XXHash32.hash(buffer)
-      })
-      for (let i = 0; i < 1000; i++) {
-         h.insert(`hello${i}`)
-      }
-      const largest = h.getLargestBucket()
-      ok(largest > 2)
-   })
-
-   it("should estimate correctly", () => {
-      const h = new HyperLogLog(4, (value) => {
-         const buffer = Buffer.from(value)
-         return XXHash64.hash(buffer)
-      })
-      for (let i = 0; i < 100000; i++) {
-         h.insert(`${i}`)
-      }
-      const estimate = h.getEstimate()
-      ok(estimate > 90000 && estimate < 110000)
+   it("should contain inserted values", () => {
+      const filter = new BloomFilter(hashFunction)
+      filter.insert("hello")
+      ok(filter.contains("hello"))
    })
 })
