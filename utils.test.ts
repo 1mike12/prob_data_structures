@@ -1,5 +1,12 @@
 import { equal, deepEqual } from "assert"
-import { getBitAtIndex, iteratorFromBuffer, reverseByte, setBitAtIndex } from "./utils"
+import {
+   getBitAtIndex,
+   getSmallestXPercent,
+   harmonicMean,
+   iteratorFromBuffer,
+   reverseByte,
+   setBitAtIndex,
+} from "./utils"
 import BitField from "./BitField"
 
 describe("utils", () => {
@@ -18,17 +25,6 @@ describe("utils", () => {
       deepEqual(buffer, Buffer.from([0b11000000]))
    })
 
-   it("should convert buffer to iterator", () => {
-      const buffer = Buffer.from([0b11000001, 0b00000001])
-      const iterator = iteratorFromBuffer(buffer)
-      const result = []
-      for (let bit of iterator) {
-         result.push(bit)
-      }
-      deepEqual(result, [1, 1, 0, 0, 0, 0, 0, 1,
-         0, 0, 0, 0, 0, 0, 0, 1])
-   })
-
    it("should reverse byte", () => {
       equal(reverseByte(0b10000000), 0b00000001)
       equal(reverseByte(0b11000000), 0b00000011)
@@ -43,5 +39,15 @@ describe("utils", () => {
       const field = BitField.from(Buffer.from([0b10000000, 0b000000011]))
       equal(field.toString(true), "0b00000001 0b11000000")
       equal(field.toString(false), "00000001 11000000")
+   })
+
+   it("should calculate harmonic mean", () => {
+      equal(harmonicMean([1, 4, 4]), 2)
+      equal(harmonicMean([1, 4, 4, 10]), 2.5)
+   })
+
+   it("should get smallest x percent", () => {
+      deepEqual(getSmallestXPercent([1, 2, 3, 4, 5, 6], 0.5), [1, 2, 3])
+      deepEqual(getSmallestXPercent([1, 2, 3, 4, 5, 6, 7, 8], 0.25), [1, 2])
    })
 })

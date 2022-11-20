@@ -44,10 +44,27 @@ export function byteToBinaryString(byte: number): string {
    return byte.toString(2).padStart(8, "0")
 }
 
-export function bufferToBinaryString(buffer: Buffer): string {
-   function byteToBinaryString(s) {
-      return s.toString(2).padStart(8, "0")
+/**
+ * get a mean that is less sensitive to outliers
+ * @param values
+ */
+export function harmonicMean(values: number[]): number {
+   let sum = 0
+   for (const value of values) {
+      sum += 1 / value
    }
-
-   return [...buffer].map(byteToBinaryString).join(" ")
+   return values.length / sum
 }
+
+/**
+ * used to grab the ie 70% smallest values in the bucket array to throw away outliers
+ * @param values
+ * @param percent range [0, 1]
+ */
+export function getSmallestXPercent(values: number[], percent: number): number[] {
+   const copy = [...values]
+   copy.sort((a, b) => a - b)
+   const count = Math.floor(values.length * percent)
+   return copy.slice(0, count)
+}
+
