@@ -33,9 +33,21 @@ export function iteratorFromBuffer(buffer: Buffer): IterableIterator<number> {
    }
 }
 
+export function reverseByte(b: number) {
+   b = (b & 0xF0) >> 4 | (b & 0x0F) << 4
+   b = (b & 0xCC) >> 2 | (b & 0x33) << 2
+   b = (b & 0xAA) >> 1 | (b & 0x55) << 1
+   return b
+}
+
+export function byteToBinaryString(byte: number): string {
+   return byte.toString(2).padStart(8, "0")
+}
+
 export function bufferToBinaryString(buffer: Buffer): string {
    function byteToBinaryString(s) {
-      return s.toString(2).padStart(8, '0');
+      return s.toString(2).padStart(8, "0")
    }
+
    return [...buffer].map(byteToBinaryString).join(" ")
 }
