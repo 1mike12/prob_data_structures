@@ -15,7 +15,7 @@ export default class BitField {
    get(index: number): number {
       const byte = this.buffer[Math.floor(index / 8)]
       const bit = index % 8
-      return (byte >> (7 - bit)) & 1
+      return byte >> bit & 1
    }
 
    set(index: number, value: number) {
@@ -25,7 +25,7 @@ export default class BitField {
       const byteIndex = Math.floor(index / 8)
       const bit = index % 8
       const byte = this.buffer[byteIndex]
-      const mask = 0b10000000 >> bit
+      const mask = 1 << bit
       const newValue = value ? byte | mask : byte & ~mask
       this.buffer[byteIndex] = newValue
    }
@@ -42,18 +42,16 @@ export default class BitField {
       const { buffer, length } = this
       let index = 0
       let byte = buffer[0]
-      let selectorMask = 0b10000000
       return {
          next() {
             if (index >= length) {
                return { done: true, value: undefined }
             }
-            if (selectorMask === 0) {
+            if (index % 8 === 0) {
                byte = buffer[Math.floor(index / 8)]
-               selectorMask = 0b10000000
             }
-            const value = (byte & selectorMask) ? 1 : 0
-            selectorMask >>= 1
+            const value = byte & 1
+            byte >>= 1
             index++
             return { done: false, value }
          },

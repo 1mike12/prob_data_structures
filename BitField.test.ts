@@ -6,9 +6,10 @@ describe("BitField", () => {
    it("should be able to construct from buffer", () => {
       const field = BitField.from(Buffer.from([0b11000001, 0b00000001]))
       equal(field.get(0), 1)
-      equal(field.get(1), 1)
       equal(field.get(2), 0)
-      equal(field.get(15), 1)
+      equal(field.get(7), 1)
+      equal(field.get(8), 1)
+      equal(field.get(15), 0)
    })
 
    it("should set and get bits", () => {
@@ -35,7 +36,6 @@ describe("BitField", () => {
          result.push(bit)
       }
       equal(result.length, 16)
-      deepEqual(result, [1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1])
+      deepEqual(result, [1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0])
    })
-
 })
