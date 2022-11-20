@@ -1,6 +1,6 @@
 import BitField from "./BitField"
 import { deepEqual, equal } from "assert"
-import BloomFilter from "./index"
+import BloomFilter from "./bloom_filter/BloomFilter"
 
 describe("BitField", () => {
 

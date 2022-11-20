@@ -1,4 +1,4 @@
-import BitField from "./BitField"
+import BitField from "../BitField"
 
 export default class BloomFilter {
    private hashFunction: (value: string) => Buffer
@@ -90,6 +90,12 @@ export default class BloomFilter {
    static optimalHashCount(bitArrayLength: number, itemCount: number) {
       const k = (bitArrayLength / itemCount) * Math.log(2)
       return Math.round(k)
+   }
+
+   static optimalBitFieldLength(itemCount: number, desiredFalsePositiveRate: number) {
+      const m = -itemCount * Math.log(desiredFalsePositiveRate) / (Math.log(2) ** 2)
+      //round to next multiple of 8
+      return Math.ceil(m / 8) * 8
    }
 
    /**

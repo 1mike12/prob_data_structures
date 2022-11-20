@@ -1,6 +1,6 @@
 import { XXHash32 } from "xxhash-addon"
 import { equal, ok, notEqual, deepEqual } from "assert"
-import BloomFilter from "./index"
+import BloomFilter from "./BloomFilter"
 
 function closelyEqual(a: number, b: number, error: number) {
    ok(Math.abs(a - b) < (a * error))
@@ -43,5 +43,10 @@ describe("BloomFilter", () => {
          13,
          42,
          29])
+   })
+
+   it("should get optimal bitfieldLength", () => {
+      equal(BloomFilter.optimalBitFieldLength(1e6, 0.01), 9585064)
+      equal(BloomFilter.optimalBitFieldLength(1e6, 0.20), 3349840)
    })
 })
