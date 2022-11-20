@@ -64,11 +64,7 @@ export default class BitField {
    }
 
    numberOfOnes(): number {
-      let count = 0
-      for (const bit of this) {
-         if (bit === 1) count++
-      }
-      return count
+      return this.oneCount
    }
 
    [Symbol.iterator]() {
