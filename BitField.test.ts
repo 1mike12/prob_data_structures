@@ -1,5 +1,5 @@
 import BitField from "./BitField"
-import { equal } from "assert"
+import { deepEqual, equal } from "assert"
 
 describe("BitField", () => {
 
@@ -29,18 +29,13 @@ describe("BitField", () => {
    })
 
    it("should iterate over bits", () => {
-      const field = new BitField(3)
-      field.set(0, 1)
-      field.set(1, 1)
-      field.set(2, 0)
+      const field = BitField.from(Buffer.from([0b11000001, 0b00000001]))
       const result = []
       for (let bit of field) {
          result.push(bit)
       }
-      equal(result[0], 1)
-      equal(result[1], 1)
-      equal(result[2], 0)
-      equal(result.length, 3)
+      equal(result.length, 16)
+      deepEqual(result, [1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1])
    })
 
 })

@@ -39,16 +39,21 @@ export default class BitField {
    }
 
    [Symbol.iterator]() {
+      const { buffer, length } = this
       let index = 0
-      const {buffer, length} = this
+      let byte = buffer[0]
+      let selectorMask = 0b10000000
       return {
          next() {
             if (index >= length) {
                return { done: true, value: undefined }
             }
-            const byte = buffer[Math.floor(index / 8)]
-            const bit = index % 8
-            const value = (byte >> (7 - bit)) & 1
+            if (selectorMask === 0) {
+               byte = buffer[Math.floor(index / 8)]
+               selectorMask = 0b10000000
+            }
+            const value = (byte & selectorMask) ? 1 : 0
+            selectorMask >>= 1
             index++
             return { done: false, value }
          },
