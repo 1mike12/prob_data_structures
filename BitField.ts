@@ -3,10 +3,12 @@ import { byteToBinaryString, reverseByte } from "./utils"
 export default class BitField {
    private buffer: Buffer
    public length: number
+   public oneCount: number
 
    constructor(length: number) {
       this.length = length
       this.buffer = Buffer.alloc(Math.ceil(length / 8))
+      this.oneCount = 0
    }
 
    static from(buffer: Buffer): BitField {
@@ -30,7 +32,14 @@ export default class BitField {
       const byte = this.buffer[byteIndex]
       const mask = 1 << bit
       const newValue = bitValue ? byte | mask : byte & ~mask
-      this.buffer[byteIndex] = newValue
+      if (byte !== newValue) {
+         this.buffer[byteIndex] = newValue
+         if (bitValue === 1) {
+            this.oneCount++
+         } else {
+            this.oneCount--
+         }
+      }
    }
 
    map<T>(fn: (bit: number, index: number) => T): T[] {

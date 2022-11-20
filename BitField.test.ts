@@ -1,5 +1,6 @@
 import BitField from "./BitField"
 import { deepEqual, equal } from "assert"
+import BloomFilter from "./index"
 
 describe("BitField", () => {
 
@@ -19,6 +20,19 @@ describe("BitField", () => {
       equal(field.get(0), 1)
       equal(field.get(1), 1)
       equal(field.get(2), 0)
+   })
+
+   it("should have accurate oneCount", () => {
+      const filter = new BitField(16)
+      equal(filter.oneCount, 0)
+      filter.set(0, 1)
+      equal(filter.oneCount, 1)
+      filter.set(1, 1)
+      equal(filter.oneCount, 2)
+      filter.set(0, 0)
+      equal(filter.oneCount, 1)
+      filter.set(1, 0)
+      equal(filter.oneCount, 0)
    })
 
    it("should be able to set bitfield with more than 1 byte worth of bits", () => {
