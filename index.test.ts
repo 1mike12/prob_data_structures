@@ -1,5 +1,5 @@
 import { XXHash32 } from "xxhash-addon"
-import { equal, ok, notEqual } from "assert"
+import { equal, ok, notEqual, deepEqual } from "assert"
 import BloomFilter from "./index"
 
 function closelyEqual(a: number, b: number, error: number) {
@@ -24,7 +24,24 @@ describe("BloomFilter", () => {
 
    it("should contain inserted values", () => {
       const filter = new BloomFilter(hashFunction)
-      filter.insert("hello")
-      ok(filter.contains("hello"))
+      filter.insert("test")
+      ok(filter.contains("test"))
+   })
+
+   it("should generateIndex positions", () => {
+      const output = []
+      for (let i = 0; i < 10; i++) {
+         output.push(BloomFilter.generateIndex(0, 1, i, 50))
+      }
+      deepEqual(output, [0,
+         1,
+         3,
+         7,
+         14,
+         25,
+         41,
+         13,
+         42,
+         29])
    })
 })

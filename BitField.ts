@@ -1,7 +1,10 @@
+import { byteToBinaryString, reverseByte } from "./utils"
+
 export default class BitField {
    private buffer: Buffer
+   public length: number
 
-   constructor(public length: number) {
+   constructor(length: number) {
       this.length = length
       this.buffer = Buffer.alloc(Math.ceil(length / 8))
    }
@@ -18,16 +21,37 @@ export default class BitField {
       return byte >> bit & 1
    }
 
-   set(index: number, value: number) {
-      if (value !== 0 && value !== 1) throw new Error("value must be 0 or 1")
+   set(index: number, bitValue: number) {
+      if (bitValue !== 0 && bitValue !== 1) throw new Error("value must be 0 or 1")
       if (index >= this.length) throw new Error("index out of bounds")
 
       const byteIndex = Math.floor(index / 8)
       const bit = index % 8
       const byte = this.buffer[byteIndex]
       const mask = 1 << bit
-      const newValue = value ? byte | mask : byte & ~mask
+      const newValue = bitValue ? byte | mask : byte & ~mask
       this.buffer[byteIndex] = newValue
+   }
+
+   map<T>(fn: (bit: number, index: number) => T): T[] {
+      const result = []
+      let index = 0
+      for (const bit of this) {
+         result.push(fn(bit, index))
+         index++
+      }
+      return result
+   }
+
+   toString(withBinaryMarkers = false): string {
+      const output = []
+      const binaryMarker = withBinaryMarkers ? "0b" : ""
+      for (const byte of this.buffer) {
+         const reversed = reverseByte(byte)
+         const binaryString = `${binaryMarker}${byteToBinaryString(reversed)}`
+         output.push(binaryString)
+      }
+      return output.join(" ")
    }
 
    numberOfOnes(): number {
