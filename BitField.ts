@@ -67,6 +67,10 @@ export default class BitField {
       return this.oneCount
    }
 
+   getBuffer(): Buffer {
+      return this.buffer
+   }
+
    [Symbol.iterator]() {
       const { buffer, length } = this
       let index = 0
