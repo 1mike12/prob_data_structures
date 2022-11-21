@@ -1,5 +1,8 @@
 import BitField from "../BitField"
 
+/**
+ *  a classic bloom filter implementation
+ */
 export default class BloomFilter {
    private hashFunction: (value: string) => Buffer
    private hashCount: number

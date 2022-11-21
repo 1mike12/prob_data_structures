@@ -1,3 +1,6 @@
+/**
+ * open addressing hashmap that uses enhanced double hashing to find open spaces on collisions
+ */
 export default class HashMap {
    private hashFunction: (value: string) => Buffer
    private array: [string, number][]

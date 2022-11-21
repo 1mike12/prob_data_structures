@@ -1,7 +1,10 @@
 import { getDistanceToNext1, getNSignificantBits } from "./utils"
 import { getSmallestXPercent, harmonicMean } from "../utils"
 
-
+/**
+ *  HyperLogLog is a probabilistic data structure that estimates the number of unique
+ *  elements it's seen. It trades off accuracy for very low memory usage
+ */
 export default class HyperLogLog {
    private readonly hashFunction: (string) => Buffer
    /**

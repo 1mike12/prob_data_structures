@@ -1,6 +1,10 @@
 import BitField from "../BitField"
 import * as Buffer from "buffer"
 
+/**
+ * Simhash generates identical hashes for similar strings. It's a form of locality-sensitive hashing (LHR) that is
+ * able to bring the dimensionality of a dataset down to very small vectors.
+ */
 export default class SimHash {
    private hashFunction: (value: string) => Buffer
    private vectorLength: number
@@ -14,9 +18,7 @@ export default class SimHash {
       const tokens = SimHash.tokenize(text)
       let token_count: { [token: string]: number } = {}
 
-
       const rawVector = new Array(this.vectorLength).fill(0)
-
       for (let token of tokens) {
          token_count[token] = (token_count[token] || 0) + 1
       }
